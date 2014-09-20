@@ -15,6 +15,22 @@ PROF=Lisan
 # ===========================================================================================
 today=`date`
 echo "$0:Starting post-install: $today"
+
+if [ "$(id -u)" != "0" ]; then
+echo Error: You must be root to run this script! >&2
+exit 4
+fi
+
+if ! type -P iw >/dev/null; then
+ echo "Error: Please install iw and try again!" >&2
+ exit 1
+fi
+
+if ! type -P wifi-menu >/dev/null; then
+ echo "Error: Please install wifi-menu and try again!" >&2
+ exit 1
+fi
+
 echo "[0: installed wifi adapters.]"
 iw dev
 echo "[1: identify wifi, connect and accept profile]"
