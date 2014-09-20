@@ -37,7 +37,7 @@ echo "Starting install: $today"
 mount $ALS /mnt
 if [ -d $HDIR ]
 then
-  echo home dir $HDIR Exist. Exiting...
+  echo "home dir $HDIR Exist. Exiting..."
   exit
 else
   mkdir -pv $HDIR
@@ -48,18 +48,24 @@ mount $ALH $HDIR
 # do the same for boot, var, etc.
 # setup wifi
 
-echo [0-5: setting wifi to access the internet]
+echo mounted partitions:
+mount
+echo "ok?-(RET)."; read dummy
+
+echo "[0-5: setting wifi to access the internet wls1]"
 iw dev
 wifi-menu wls1
 
-echo [1-5: loading partition with arch base and devel programs and stuff]
+echo "[1-5: populating partition with arch base and devel programs and stuff]"
 pacstrap -i /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
-echo [2-5: working on chrooted partition]
+echo "ok?-(RET)."; read dummy
+
+echo "[2-5: working on chrooted partition]"
 arch-chroot /mnt
 
-echo [3-5: locales, time zone and keymap]
+echo "[3-5: locales, time zone and keymap]"
 # TimeZone
 # to check:  ls /usr/share/zoneinfo/
 # ln -s /usr/share/zoneinfo/America/Panama /etc/localtime
@@ -79,33 +85,33 @@ systemctl set-locale LANG=”en_US.UTF-8″
 #UTC clock is the default. Unnecessary.
 hwclock --systohc --utc
 
-echo [4-5: setting hostname]
+echo "[4-5: setting hostname]"
 echo “arch-lenovo” > /etc/hostname
 
 #(systemctl enable dhcpcd.service or see “Setting a Static IP”)
 
-echo [5-5: populating linux arch base]
+echo "[5-5: populating linux arch base]"
 mkinitcpio -p linux
 
-echo [starting pre post-installation. root password]
+echo "[starting pre post-installation. root password]"
 passwd
 pacman -S sudo
 
-echo [installing grub]
+echo "[installing grub]"
 
 pacman -S grub os-prober
 grub-install (--target=i386-pc --recheck) /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
-echo [installing required packages for post installatioin steps]
+echo "[installing required packages for post installatioin steps]"
 
 pacman -S dialog iw wpa_supplicant 
 pacman –S bash-completion
 pacman -S zsh 
-echo [ending chroot tasks...]
+echo "[ending chroot tasks...]"
 
 exit
 umount -R /mnt
-echo [unmounting partitions....]
-echo please reboot. Thanks
+echo "[unmounting partitions....]"
+echo "please reboot. Thanks"
 #reboot
