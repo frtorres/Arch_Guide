@@ -17,31 +17,39 @@ NEWUSER=mariarch
 NEWSHELL=/bin/zsh
 # ===========================================================================================
 today=`date`
-echo "arch Linux POST-INSTALL LXDE Desktop environment -- Starting install: $today"
+echo "$0:LXDE Desktop environment -- Starting install: $today"
 echo "----------------------------------------------------------------------------"
 
 if [ "$(id -u)" != "0" ]; then
 echo Error: You must be root to run this script! >&2
 exit 4
 fi
-
+echo
 echo "[0-5: creating a new user $NEWUSER with shell: $NEWSHELL]"
+echo
 useradd -m -g users -G wheel,audio,disk,games,network,optical,power,video,storage -s $NEWSHELL $NEWUSER
 passwd $NEWUSER
 
+echo
 echo "[1-5: install the default X environment that provides the main Xorg server configurations and 3D support.]"
+echo
 pacman -S alsa-utils xorg-server xorg-xinit xorg-utils xorg-server-utils mesa xf86-video-vesa
 
+echo
 echo "[2-5: extra Xorg functionality also install the following packages.]"
+echo
 pacman -S xorg-twm xterm xorg-xclock ttf-dejavu
 
+echo
 echo "[3-5: For a laptop or netbook, also install drivers for touchpad input support."]
+echo
 pacman -S xf86-input-synaptics
 
 #identify gfx card
 # open source drivers query
-
+echo
 echo "[4-5: GFX card and driver install.]"
+echo
 echo available drivers on repos
 pacman –Ss | grep xf86-video
 echo "installed card(s):"
@@ -73,7 +81,9 @@ echo "ok?-(RET)."; read dummy
 #----
 #lxde
 #----
+echo
 echo "[5-5: Installing LXDE]"
+echo 
 pacman -S lxde
 pacman -s lxdm
 systemctl enable lxdm
