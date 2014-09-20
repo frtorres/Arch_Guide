@@ -1,0 +1,36 @@
+# Arch Linux Guide
+# Scripts Section
+# Install Archlinux.
+# ===========================================================================================
+#
+# Post-Install STEP ONE.
+#
+# as of Sept 17,2014.
+# mariachi.
+# tested on Lenovo X200 from scratch
+# ===========================================================================================
+# Variables and Parameters
+ADAPTER=wls1
+PROF=Lisan
+# ===========================================================================================
+today=`date`
+echo "$0:Starting post-install: $today"
+echo "[0: installed wifi adapters.]"
+iw dev
+echo "[1: identify wifi, connect and accept profile]"
+wifi-menu $ADAPTER
+echo "[2: activating profile.]"
+netctl start $PROF
+echo "[3: enabling automatic activation for profile.]"
+netctl enable $PROF
+echo "[4: testing internet availability.  ctrl c to end]"
+if [[ "$(ping -c 1 8.8.8.8 | grep '100% packet loss' )" != "" ]]; then
+echo "$0:Internet isn't present."
+exit 1
+else
+echo "$0: ok!!, I have internet access..."
+fi
+echo Ok, bye.
+
+
+
