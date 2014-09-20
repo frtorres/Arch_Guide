@@ -97,6 +97,14 @@ echo "[starting pre post-installation. root password]"
 passwd
 pacman -S sudo
 
+echo "#sudoers. To allow users in wheel group, vi /etc/sudoers file and uncomment - %wheel ALL=(ALL) ALL -."
+echo "ok to edit?-(RET)."; read dummy
+visudo
+# sudo visudo 
+# OR
+# nano /etc/sudoers
+# The /etc/sudoers should only be edited with the visudo command.
+
 echo "[installing grub]"
 
 pacman -S grub os-prober
