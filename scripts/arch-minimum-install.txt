@@ -31,8 +31,15 @@ ALS=/dev/sda7
 ALH=/dev/sda6
 HDIR=/mnt/home
 # ===========================================================================================
+#[ "$(id -u)" = 0 ] || exit
+
 today=`date`
 echo "Starting install: $today"
+
+if [ "$(id -u)" != "0" ]; then
+ echo Error: You must be root to run this script! >&2
+ exit 4
+fi
 
 mount $ALS /mnt
 if [ -d $HDIR ]
@@ -123,6 +130,12 @@ echo "[installing required packages for post installatioin steps]"
 pacman -S dialog iw wpa_supplicant 
 pacman –S bash-completion
 pacman -S zsh 
+
+if ! [ -x /usr/bin/git ]; then
+ pacman -S git
+ which git
+fi
+
 echo "[ending chroot tasks...]"
 
 exit
