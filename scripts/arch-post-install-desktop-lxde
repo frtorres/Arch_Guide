@@ -1,0 +1,75 @@
+# Arch Linux Guide
+# Scripts Section
+# Install Archlinux. Post Installatio - Desktop environment LXDE
+# ===========================================================================================
+#
+# Desktop Install. LXDE
+#
+# as of Sept 17,2014.
+# mariachi.
+# tested on aLenovo X200 from scratch
+# ------------------------------------
+# Preconditions:
+# Minimum Install.
+# ===========================================================================================
+# Variables and Parameters
+NEWUSER=mariarch
+NEWSHELL=/bin/zsh
+# ===========================================================================================
+today=`date`
+echo "arch Linux POST-INSTALL LXDE Desktop environment -- Starting install: $today"
+echo "----------------------------------------------------------------------------"
+
+echo "[0-5: creating a new user $NEWUSER with shell: $NEWSHELL]"
+useradd -m -g users -G wheel,audio,disk,games,network,optical,power,video,storage -s $NEWSHELL $NEWUSER
+passwd $NEWUSER
+
+echo "[1-5: install the default X environment that provides the main Xorg server configurations and 3D support.]"
+pacman -S alsa-utils xorg-server xorg-xinit xorg-utils xorg-server-utils mesa xf86-video-vesa
+
+echo "[2-5: extra Xorg functionality also install the following packages.]"
+pacman -S xorg-twm xterm xorg-xclock ttf-dejavu
+
+echo "[3-5: For a laptop or netbook, also install drivers for touchpad input support."]
+pacman -S xf86-input-synaptics
+
+#identify gfx card
+# open source drivers query
+
+echo "[4-5: GFX card and driver install.]"
+echo available drivers on repos
+pacman –Ss | grep xf86-video
+echo "installed card(s):"
+lspci | grep VGA
+pacman -S xf86-video-intel
+
+#To list Proprietary drivers run the following commands.
+## Nvidia ##
+#pacman –Ss | grep nvidia
+## AMD/ATI ##
+#pacman –Ss | grep ATI
+#pacman –Ss | grep AMD
+## Intel ##
+#pacman –Ss | grep intel
+#pacman –Ss | grep Intel
+
+# ORIGINAL command
+#pacman -S alsa-utils vim sudo xorg-server xorg-server-utils xorg-xinit mesa xf86-video-vesa xf86-input-synaptics xorg-twm xorg-xclock xterm ttf-dejavu
+
+#startx should show X Windows is working
+#
+echo "[5-5: Check X system is working.]"
+echo available drivers on repos
+echo "ok?-(RET)."; read dummy
+startx
+
+#DESKTOP ENVIRONMENTS
+#
+#----
+#lxde
+#----
+echo "[Finnal: installinf LXDE.]"
+pacman -S lxde
+pacman -s lxdm
+systemctl enable lxdm
+
