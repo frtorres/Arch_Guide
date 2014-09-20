@@ -20,6 +20,11 @@ today=`date`
 echo "arch Linux POST-INSTALL LXDE Desktop environment -- Starting install: $today"
 echo "----------------------------------------------------------------------------"
 
+if [ "$(id -u)" != "0" ]; then
+echo Error: You must be root to run this script! >&2
+exit 4
+fi
+
 echo "[0-5: creating a new user $NEWUSER with shell: $NEWSHELL]"
 useradd -m -g users -G wheel,audio,disk,games,network,optical,power,video,storage -s $NEWSHELL $NEWUSER
 passwd $NEWUSER
@@ -58,17 +63,17 @@ pacman -S xf86-video-intel
 
 #startx should show X Windows is working
 #
-echo "[5-5: Check X system is working.]"
+echo "[WARNING: Stop here and check startx on user account]"
 echo available drivers on repos
 echo "ok?-(RET)."; read dummy
-startx
+#startx
 
 #DESKTOP ENVIRONMENTS
 #
 #----
 #lxde
 #----
-echo "[Finnal: installinf LXDE.]"
+echo "[5-5: Installing LXDE]"
 pacman -S lxde
 pacman -s lxdm
 systemctl enable lxdm
