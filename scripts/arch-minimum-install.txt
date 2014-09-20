@@ -34,8 +34,9 @@ HDIR=/mnt/home
 #[ "$(id -u)" = 0 ] || exit
 
 today=`date`
+echo
 echo "Starting install: $today"
-
+echo
 if [ "$(id -u)" != "0" ]; then
  echo Error: You must be root to run this script! >&2
  exit 4
@@ -55,11 +56,15 @@ mount $ALH $HDIR
 # do the same for boot, var, etc.
 # setup wifi
 
+echo
 echo mounted partitions:
 mount
+echo
 echo "ok?-(RET)."; read dummy
 
+echo
 echo "[0-5: setting wifi to access the internet wls1]"
+echo
 iw dev
 wifi-menu wls1
 
@@ -70,16 +75,23 @@ else
      echo "$0: ok!!, I have internet access..."
 fi
 
+echo
 echo "[1-5: populating partition with arch base and devel programs and stuff]"
+echo
 pacstrap -i /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
 echo "ok?-(RET)."; read dummy
 
-echo "[2-5: working on chrooted partition]"
+echo
+echo "[2-5: working now on chrooted partition!!!.]"
+echo
 arch-chroot /mnt
 
+echo
 echo "[3-5: locales, time zone and keymap]"
+echo
+
 # TimeZone
 # to check:  ls /usr/share/zoneinfo/
 # ln -s /usr/share/zoneinfo/America/Panama /etc/localtime
@@ -99,15 +111,22 @@ systemctl set-locale LANG=”en_US.UTF-8″
 #UTC clock is the default. Unnecessary.
 hwclock --systohc --utc
 
+echo
 echo "[4-5: setting hostname]"
+echo
 echo “arch-lenovo” > /etc/hostname
 
 #(systemctl enable dhcpcd.service or see “Setting a Static IP”)
 
+echo
 echo "[5-5: populating linux arch base]"
+echo
 mkinitcpio -p linux
 
+echo
 echo "[starting pre post-installation. root password]"
+echo
+echo please set password for root
 passwd
 pacman -S sudo
 
@@ -119,17 +138,24 @@ visudo
 # nano /etc/sudoers
 # The /etc/sudoers should only be edited with the visudo command.
 
+echo
 echo "[installing grub]"
+echo
 
 pacman -S grub os-prober
 grub-install (--target=i386-pc --recheck) /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
+echo "------------------------------------------------------------"
+echo
 echo "[installing required packages for post installatioin steps]"
+echo
 
 pacman -S dialog iw wpa_supplicant 
 pacman –S bash-completion
 pacman -S zsh 
+
+echo installing git
 
 if ! [ -x /usr/bin/git ]; then
  pacman -S git
@@ -137,7 +163,7 @@ if ! [ -x /usr/bin/git ]; then
 fi
 
 echo "[ending chroot tasks...]"
-
+echo
 exit
 umount -R /mnt
 echo "[unmounting partitions....]"
