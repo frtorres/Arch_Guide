@@ -30,12 +30,15 @@ ALS=/dev/sda7
 # export ALH=/dev/sda6
 ALH=/dev/sda6
 HDIR=/mnt/home
+# sda is destination install disk  
+DISK=/dev/sda
 # ===========================================================================================
 #[ "$(id -u)" = 0 ] || exit
 
 today=`date`
 echo
 echo "Starting install: $today"
+echo "-----------------------------------------------"
 echo
 if [ "$(id -u)" != "0" ]; then
  echo Error: You must be root to run this script! >&2
@@ -143,7 +146,7 @@ echo "[installing grub]"
 echo
 
 pacman -S grub os-prober
-grub-install (--target=i386-pc --recheck) /dev/sda
+grub-install (--target=i386-pc --recheck) $DISK
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "------------------------------------------------------------"
