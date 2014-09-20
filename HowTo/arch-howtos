@@ -1,0 +1,72 @@
+Arch_Guide
+howtos section
+Consolidated file
+
+to do: break this down.
+-------------------------------------------------------------------------------------------
+
+-----------------------------------Yaourt--------------------------------------------------
+from: http://www.tecmint.com/arch-linux-installation-guide/
+
+To activate Yaourt Package Tool (downloading and building AUR packages) go to bottom of the same /etc/pacman.conf file and add the following directives.
+
+[archlinuxfr]
+SigLevel = Never
+Server = http://repo.archlinux.fr/$arch
+----------------------------------------><--------------------------------------------------
+
+----------------------------------------AUR-------------------------------------------------
+Install an app from AUR  (as user)
+curl -O https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
+tar zxvf package-query.tar.gz
+cd package-query
+makepkg -si
+cd ..
+----------------------------------------><--------------------------------------------------
+
+----------------------------------------ZSH-------------------------------------------------
+2. ZSH
+https://github.com/robbyrussell/oh-my-zsh
+
+The manual way
+
+2.1. Clone the repository:
+
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+
+2.2. Optionally, backup your existing ~/.zshrc file:
+
+cp ~/.zshrc ~/.zshrc.orig
+
+2.3. Create a new Zsh config file by copying the Zsh template we’ve provided:
+
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+2.4. Set Zsh as your default shell:
+
+chsh -s /bin/zsh
+
+2.5. Start or restart Zsh by opening a new command-line window.
+
+~/.zshrc
+
+edit that file to load pluginis and change theme VAR to load a proper theme.
+
+----------------------------------------><--------------------------------------------------
+
+----------------------------------------PACMAN----------------------------------------------
+
+To update the repositories
+ sudo pacman -Sy
+
+
+To update system
+ sudo pacman -Syu
+
+To remove any package
+ sudo pacman -R
+
+To update packages from AUR
+yaourt -Syu
+
+----------------------------------------><--------------------------------------------------
