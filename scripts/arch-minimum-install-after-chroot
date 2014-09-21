@@ -52,14 +52,14 @@ echo
 # TimeZone
 # to check:  ls /usr/share/zoneinfo/
 ln -s /usr/share/zoneinfo/America/Panama /etc/localtime
-# localectl set-locale America/Panama
 
 # lOCALES MANUAL
 # VI /etc/locale.gen UNCOMMENT needed entries
 #locale-gen
 #echo LANG=en_US.UTF-8 > /etc/locale.conf
 #export LANG=en_US.UTF-8
-#systemctl set-locale LANG=en_US.UTF-8
+localectl set-locale LANG=en_US.UTF-8
+
 
 #keymap
 #tip. ls /usr/share/kbd/keymaps/i386/qwerty/
