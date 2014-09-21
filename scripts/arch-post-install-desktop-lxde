@@ -51,20 +51,20 @@ echo
 echo "[4-5: GFX card and driver install.]"
 echo
 echo available drivers on repos
-pacman –Ss | grep xf86-video
+pacman -Ss | grep xf86-video
 echo "installed card(s):"
 lspci | grep VGA
 pacman -S xf86-video-intel
 
 #To list Proprietary drivers run the following commands.
 ## Nvidia ##
-#pacman –Ss | grep nvidia
+#pacman -Ss | grep nvidia
 ## AMD/ATI ##
-#pacman –Ss | grep ATI
-#pacman –Ss | grep AMD
+#pacman -Ss | grep ATI
+#pacman -Ss | grep AMD
 ## Intel ##
-#pacman –Ss | grep intel
-#pacman –Ss | grep Intel
+#pacman -Ss | grep intel
+#pacman -Ss | grep Intel
 
 # ORIGINAL command
 #pacman -S alsa-utils vim sudo xorg-server xorg-server-utils xorg-xinit mesa xf86-video-vesa xf86-input-synaptics xorg-twm xorg-xclock xterm ttf-dejavu
@@ -84,7 +84,11 @@ echo "ok?-(RET)."; read dummy
 echo
 echo "[5-5: Installing LXDE]"
 echo 
-pacman -S lxde
-pacman -s lxdm
-systemctl enable lxdm
+#pacman -S lxde
+#pacman -s lxdm
+#systemctl enable lxdm
+
+pacman -S gnome gnome-extra gnome-shell
+systemctl enable gdm.service
+
 
