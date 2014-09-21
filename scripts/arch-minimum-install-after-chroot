@@ -1,0 +1,130 @@
+# Arch Linux Guide
+# Scripts Section
+# Install Archlinux.
+# ===========================================================================================
+#
+# Minumum Install.  AFTER chroot
+#
+# as of Sept 17,2014.
+# mariachi.
+# tested on a Lenovo X200 from scratch
+# ------------------------------------
+# Preparation Steps
+# Format and initialize SWAP partition.
+# mkswap /dev/sda2
+# swapon /dev/sda2
+#
+# lsblk to check
+# lsblk
+#
+# to check mirrors: vi /etc/pacman.d/mirrorlist
+# ---------------------------------------------
+# clean destination partition.
+# ===========================================================================================
+
+# Variables and Parameters
+# sda7 is root partition.  ALS-Arch Linux System
+# export ALS=/dev/sda7
+ALS=/dev/sda7
+# sda7 is home partition.  ALH-Arch Linux System Home Partitioin 
+# export ALH=/dev/sda6
+ALH=/dev/sda6
+HDIR=/mnt/home
+# sda is destination install disk  
+DISK=/dev/sda
+# ===========================================================================================
+#[ "$(id -u)" = 0 ] || exit
+
+today=`date`
+echo
+echo "$0: Starting install: $today" after chroot
+echo "--------------------------------------------------------------------------------------------------------"
+echo
+if [ "$(id -u)" != "0" ]; then
+ echo Error: You must be root to run this script! >&2
+ exit 4
+fi
+
+echo
+echo "[3-5: locales, time zone and keymap]"
+echo
+
+# TimeZone
+# to check:  ls /usr/share/zoneinfo/
+ln -s /usr/share/zoneinfo/America/Panama /etc/localtime
+# localectl set-locale America/Panama
+
+# lOCALES MANUAL
+# VI /etc/locale.gen UNCOMMENT needed entries
+#locale-gen
+#echo LANG=en_US.UTF-8 > /etc/locale.conf
+#export LANG=en_US.UTF-8
+#systemctl set-locale LANG=en_US.UTF-8
+
+#keymap
+#tip. ls /usr/share/kbd/keymaps/i386/qwerty/
+#systemctl set-keymap br abnt2
+
+#UTC clock is the default. Unnecessary.
+hwclock --systohc --utc
+
+echo
+echo "[4-5: setting hostname]"
+echo
+echo arch-lenovo > /etc/hostname
+
+#(systemctl enable dhcpcd.service or see Setting a Static IP)
+
+echo
+echo "[5-5: populating linux arch base]"
+echo
+mkinitcpio -p linux
+
+echo
+echo "[starting pre post-installation. root password]"
+echo
+echo please set password for root
+passwd
+pacman -S sudo
+
+echo "#sudoers. To allow users in wheel group, vi /etc/sudoers file and uncomment - %wheel ALL=(ALL) ALL -."
+echo "ok to edit?-(RET)."; read dummy
+visudo
+# sudo visudo 
+# OR
+# nano /etc/sudoers
+# The /etc/sudoers should only be edited with the visudo command.
+
+echo
+echo "[installing grub]"
+echo
+
+pacman -S grub os-prober
+#grub-install (--target=i386-pc --recheck) $DISK
+grub-install $DISK
+grub-mkconfig -o /boot/grub/grub.cfg
+
+echo "====================================================================================================================="
+echo
+echo "[installing required packages for post installatioin steps]"
+echo
+
+pacman -S dialog iw wpa_supplicant 
+pacman -S bash-completion
+pacman -S zsh 
+
+echo installing git
+
+if ! [ -x /usr/bin/git ]; then
+ pacman -S git
+ which git
+fi
+
+echo "[ending chroot tasks...]"
+echo
+#exit
+echo "[unmounting partitions....]"
+umount -R /mnt
+echo "to finish, exit chroot shell and..."
+echo "please reboot. Thanks"
+#reboot
